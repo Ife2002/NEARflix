@@ -1,0 +1,35 @@
+{
+  "name": "nearflix",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.5",
+    "axios": "^0.27.2",
+    "bitcluster": "^2.0.1",
+    "crypto-js": "^4.1.1",
+    "firebase": "^9.10.0",
+    "framer-motion": "^7.5.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-encrypt": "^1.0.1",
+    "react-icons": "^4.4.0",
+    "tailwind-scrollbar-hide": "^1.1.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.1.0",
+    "autoprefixer": "^10.4.12",
+    "parcel": "^2.7.0",
+    "postcss": "^8.4.17",
+    "tailwindcss": "^3.1.8",
+    "vite": "^3.1.0"
+  }
+}
