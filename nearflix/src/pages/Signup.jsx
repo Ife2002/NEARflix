@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 //import { Link, useNavigate } from 'react-router-dom'
+//import { login } from "./utils/near";
+
 
 
 const Signup = () => {
@@ -24,6 +26,7 @@ const Signup = () => {
               
                   <button
                     className='border-red-600 border-[3px] py-3 my-6 rounded-[50px] px-[10%] font-bold'
+                    onClick={login}
                   >
                   <p> Connect Wallet </p> 
                   </button>

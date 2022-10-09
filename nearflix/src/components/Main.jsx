@@ -38,7 +38,7 @@ const Main = () => {
           <div className='flex my-6'>
             <button className='border bg-gray-200 hover:bg-red-600 text-black text-sm md:text-2xl  py-2 px-2 md:px-5 flex items-center rounded'>
               <FaPlay  className='mr-2' />
-              Play
+              Wallet
             </button>
             <button className='bg-zinc-500 bg-opacity-50 hover:bg-opacity-75 text-white text-sm md:text-2xl py-3 px-2 md:px-5 ml-4 flex items-center rounded'>
               <BsPlusLg className='mr-2' />

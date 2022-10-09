@@ -5,5 +5,8 @@
   "license": "MIT",
   "devDependencies": {
     "near-sdk-as": "^3.2.3"
+  },
+  "dependencies": {
+    "near-cli": "^3.4.2"
   }
 }

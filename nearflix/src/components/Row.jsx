@@ -7,11 +7,17 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import Movie from './Movie';
 import PopUp from './PopUp';
 import Overlay from './Overlay';
+import Wrapper from './Wrapper';
 
-export const ItemContext = createContext();
+
 
 const Row = ({ title, fetchURL, rowId, item}) => {
   const [movies, setMovies] = useState([])
+  const [pop, setPop] = useState([])
+
+  const handlePop = (item) => {
+    setPop([item])
+  }
   
  
 
@@ -38,19 +44,21 @@ const Row = ({ title, fetchURL, rowId, item}) => {
       <div className='relative flex items-center group'>
         <MdChevronLeft 
         onClick={slideLeft}
-        className='text-white bg-opacity-30 h-full bg-gradient-to-r from-black left-0 absolute opacity-75 hover:opacity-100 cursor-pointer z-10 hidden group-hover:block' size={60}/>
+        className='text-white bg-opacity-30 h-full bg-gradient-to-r from-black left-0 z-5 absolute opacity-75 hover:opacity-100 cursor-pointer z-10 hidden group-hover:block' size={60}/>
         <div 
           id={'slider' + rowId} 
-          className="w-[100%] h-[100%] py-auto overflow-y-visible overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide ">
-          {movies.map((item, id) => (<Movie key={id} item={item} />
+          className="w-[100%] h-[100%] py-auto overflow-y-visible overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide block">
+          {movies.map((item, id) => (<Movie key={id} item={item} pop={() => handlePop(item)} />
           ))}
         </div>
         <MdChevronRight 
         onClick={slideRight}
-        className='text-white bg-opacity-50 h-full bg-gradient-to-l from-black right-0 absolute opacity-50 hover:opacity-100 cursor-pointer z-10 hidden group-hover:block' size={60}/>
+        className='text-white bg-opacity-50 h-full bg-gradient-to-l from-black right-0 absolute z-5 opacity-50 hover:opacity-100 cursor-pointer z-10 hidden group-hover:block' size={60}/>
       </div>
-
-      {/**/}
+      {pop.map((item) => {
+        return(<PopUp item={item} />)
+      })}
+      
      
     </>
   )
