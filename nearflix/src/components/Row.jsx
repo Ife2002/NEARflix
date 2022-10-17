@@ -48,7 +48,7 @@ const Row = ({ title, fetchURL, rowId, item}) => {
         <div 
           id={'slider' + rowId} 
           className="w-[100%] h-[100%] py-auto overflow-y-visible overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide block">
-          {movies.map((item, id) => (<Movie key={id} item={item} pop={() => handlePop(item)} />
+          {movies.map((item, id) => (<Movie item={{...item,}} pop={() => handlePop(item)} />
           ))}
         </div>
         <MdChevronRight 

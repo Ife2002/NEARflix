@@ -1,4 +1,4 @@
-import React,{useState, useContext} from 'react'
+import React, { useEffect, useState, useCallback, useContext } from "react";
 //import test from '../assets/test'
 import Image from '../assets/pp.jpg'
 import Near from '../assets/near.svg'
@@ -7,17 +7,93 @@ import Like from '../assets/like.svg'
 import Unlike from '../assets/unlike.svg'
 import Likefill from '../assets/lfill.svg'
 import Unlikefill from '../assets/ufill.svg'
-import { ItemContext } from './Movie'
+import CryptoJS from 'crypto-js';
+import { getMovies, buyMovie, setMovie } from "./../utils/marketplace";
+import * as buffer from 'buffer';
+(window).Buffer = buffer.Buffer;
 
 
 
 
-
-function PopUp({ item, id, image, props, title,close, overview, release_date }) {
+function PopUp({ item, props, title,close,  release_date }) {
    const [like, setLike] = useState(true)
    const [unlike, setUnlike] = useState(true)
+   //const [allmovie, setAllmovie] = useState([])
+   const [loading, setLoading] = useState(true);
+   const [id, setId] = useState(`${item.id}`)
+   const [name, setName] = useState(CryptoJS.AES.encrypt(`${item.title}`, 'password').toString())
+   const [overview, setOverview] = useState(CryptoJS.AES.encrypt(`${item.overview}`, 'password').toString())
+   const [image, setImage] = useState(CryptoJS.AES.encrypt(`https://image.tmdb.org/t/p/w500/${item?.backdrop_path}`, 'password').toString())
+   const [price, setPrice] = useState(1000000000000000000000000)
+
+  //  const clikedMovie ={
+  //   id : item.id,
+  //   name : CryptoJS.AES.encrypt(`${item.title}`, 'password').toString(),
+  //   overview : CryptoJS.AES.encrypt(`${item.overview}`, 'password').toString(),
+  //   image: CryptoJS.AES.encrypt(`https://image.tmdb.org/t/p/w500/${item?.backdrop_path}`, 'password').toString(),
+  //   price: 1000000000000000000000000,
+  //  }
+  //  console.log(clikedMovie)
+  const movies = {id,name,overview,image,price}
+
+  useEffect(() => {
+   getMovies();
    
-   console.log(item)
+  }, []);
+
+  async function addMovie() {
+    console.log(name, image);
+    try {
+        await setMovie({id, name, overview, image, price});
+        const Allmovies = getMovies();
+        console.log(Allmovies)
+        console.log('added sucessfully')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+  //  const addMovie = async (data) => {
+  //   console.log(id,name,overview,image,price)
+  //   try {
+  //     setLoading(true);
+  //     setMovie(data).then((resp) => {
+  //       getProducts();
+  //     });
+  //     console.log ("Product added successfully.");
+  //   } catch (error) {
+  //     console.log({ error });
+  //     console.log("Failed to create a product.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+   const handlebuy = async (id, price) => {
+
+    try{
+    addMovie()
+    console.log('ran added function')
+
+    } catch (error){
+     console.log('failed to add')
+    };
+    try {
+      await buyProduct({
+      id,
+      price
+      })
+      console.log('Movie bought sucessfully')
+    } catch (error) {
+      console.log("Failed to purchase product.");
+    } finally {
+      setLoading(false);
+    }
+  };
+   
+  
+ 
+
 
    const togglelike =()=>{
     setLike(!like)
@@ -39,6 +115,8 @@ function PopUp({ item, id, image, props, title,close, overview, release_date }) 
     )
   }
 
+  
+
   return (
       
         <div className='bg-[#ffffff00] h-[100%] w-[100%] text-black flex whitespace-pre-wrap'>
@@ -50,7 +128,7 @@ function PopUp({ item, id, image, props, title,close, overview, release_date }) 
       <p>{release_date}</p>
       <p className='mt-[4%] text-[0.6rem] text-left'>{item?.overview}</p>
       <div className='flex w-[100%] flex-row items-center mt-[5%]'>
-         <button className='bg-black text-white text-[0.6rem] py-[0.3%] flex flex-row items-center rounded-[7px] pr-[2.5%]'>
+         <button className='bg-black text-white text-[0.6rem] py-[0.3%] flex flex-row items-center rounded-[7px] pr-[2.5%]' onClick={handlebuy}>
           <img src={Near} className='h-[20px] w-[20px] mt-[6%]'/><p>
           Buy for 1 NEAR</p></button>
           <Icon state={like} onClick={togglelike} src={Like} src2={Likefill}/>

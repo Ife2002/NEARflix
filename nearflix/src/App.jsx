@@ -7,22 +7,21 @@ import Signup from './pages/Signup'
 import Row from './components/Row'
 import CryptoJS from 'crypto-js';
 import Movie from './components/Movie'
-import { login } from "./utils/near";
+import { accountBalance, login, logout as destroy } from "./utils/near";
 import Wallet from "./components/Wallet";
 
-//export const useCloseContext = () => useContext(CloseContext);
+
 
 function App() {
- // const [close, setClose] = useState(false)
+   const account = window.walletConnection.account();
   
   //let ciphertext = CryptoJS.AES.encrypt('my message wow', 'password').toString()
  // let bytes  = CryptoJS.AES.decrypt(ciphertext, 'password');
  // let originalText = bytes.toString(CryptoJS.enc.Utf8);
 
   return (  
-    <div className="bg-white min-h-screen h-[100%] w-[100%]">
-    <Wallet />
-
+    <div className="bg-black min-h-screen h-[100%] w-[100%]">
+       <Home /> 
     </div>
     )
 }

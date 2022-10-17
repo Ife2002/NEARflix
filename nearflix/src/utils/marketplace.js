@@ -3,7 +3,7 @@ import { parseNearAmount } from "near-api-js/lib/utils/format";
 
 const GAS = 100000000000000;
 
-export function saveMovie(movie) {
+export function setMovie(movie) {
   movie.id = uuid4();
   movie.price = parseNearAmount(movie.price + "");
   return window.contract.setMovie({ movie }); 

@@ -1,4 +1,10 @@
-import { PersistentUnorderedMap, u128, context } from "near-sdk-as";
+import { PersistentUnorderedMap,logging,  u128, context, ContractPromiseBatch, Value } from "near-sdk-as";
+
+export type AccountId = string;
+export type Amnt = u128;
+let movieMap = new PersistentUnorderedMap<string, Movie[]>("u");
+export const ONE_NEAR = u128.from("1000000000000000000000000");
+
 
 @nearBindgen
 export class Movie {
@@ -9,19 +15,30 @@ export class Movie {
     price: u128;
     owner: string;
     sold: u32;
+
     public static fromPayload(payload: Movie): Movie {
-        const product = new Movie();
-        product.id = payload.id;
-        product.name = payload.name;
-        product.overview = payload.overview;
-        product.image = payload.image;
-        product.price = payload.price;
-        product.owner = context.sender;
-        return product;
+        const movie = new Movie();
+        movie.id = payload.id;
+        movie.name = payload.name;
+        movie.overview = payload.overview;
+        movie.image = payload.image;
+        movie.price = payload.price;
+        movie.owner = context.sender;
+        return movie;
     }
-    public incrementSoldAmount(): void {
+    
+    public  incrementSoldAmount(): void {
         this.sold = this.sold + 1;
     }
-}
+    public static buyMovie(movie: Movie, movieId : string): void {
+         listedMovies.set(movie.id, movie);
+         ContractPromiseBatch.create(movie.owner).transfer(context.attachedDeposit);
+         movie.incrementSoldAmount();
+         
+      }
 
-export const listedMovies = new PersistentUnorderedMap<string, Movie>("LISTED_MOVIES");
+}
+export const listedMovies = new PersistentUnorderedMap<string, Movie>("L_M");
+
+export const boughtMovies = new PersistentUnorderedMap<string, string[]>("b")
+

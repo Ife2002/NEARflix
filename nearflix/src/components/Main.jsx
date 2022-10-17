@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import requests from '../Request';
+import Wallet from './Wallet';
 
 import { FaPlay } from 'react-icons/fa';
 import { BsPlusLg } from 'react-icons/bs';
@@ -29,7 +30,13 @@ const Main = () => {
   return (
     <div className='w-full h-[550px] text-white'>
       <div className='w-full h-full'>
-        <div className='absolute w-full h-[550px] bg-gradient-to-t from-black'></div>
+        <div className='absolute w-full h-[550px] bg-gradient-to-t from-black'>
+          <div className='w-[100%] flex justify-end '>
+            <div className='h-[100%] w-[10%] bg-white rounded-[14px] text-black'>
+              <Wallet />
+            </div>
+          </div>
+        </div>
         <img className='w-full h-full object-cover' src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`} 
           alt={movie?.title} 
         />

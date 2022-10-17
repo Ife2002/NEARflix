@@ -21,7 +21,8 @@ function Wallet({ address, amount, symbol }) {
         <div>{account.accountId}</div>
         <div>{balance}</div>
         <div>NEAR</div>
-       <button onClick={login}>Connet wallet</button>
+       <button onClick={login}>Connect wallet</button>
+       <button onClick={destroy}>logout</button>
     </div>
   )
 }

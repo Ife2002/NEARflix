@@ -17,8 +17,8 @@ export async function initializeContract() {
       window.walletConnection.account(),
       nearEnv.contractName,
       {
-        viewMethods: ["getMovie", "getMovies"],
-        changeMethods: ["buyMovie", "setMovie"],
+        viewMethods: ["getMovie", "getMovies", "getMovieListByAccountId"],
+        changeMethods: ["buyMovie", "setMovie", "saveMovie"],
       }
     );
   }
