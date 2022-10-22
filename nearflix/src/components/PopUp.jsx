@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 //import test from '../assets/test'
+import {parse, stringify, toJSON, fromJSON} from 'flatted';
 import Image from '../assets/pp.jpg'
 import Near from '../assets/near.svg'
 import Cancel from '../assets/x.svg'
@@ -7,85 +8,70 @@ import Like from '../assets/like.svg'
 import Unlike from '../assets/unlike.svg'
 import Likefill from '../assets/lfill.svg'
 import Unlikefill from '../assets/ufill.svg'
-import CryptoJS from 'crypto-js';
-import { getMovies, buyMovie, setMovie } from "./../utils/marketplace";
+import CryptoJS, { x64 } from 'crypto-js';
+import { getMovies, buyMovie } from "./../utils/marketplace";
 import * as buffer from 'buffer';
+import { initializeContract } from "../utils/near";
 (window).Buffer = buffer.Buffer;
 
 
 
 
 function PopUp({ item, props, title,close,  release_date }) {
+
+   const account = window.walletConnection.account();
+   const GAS = 100000000000000;
+
    const [like, setLike] = useState(true)
    const [unlike, setUnlike] = useState(true)
-   //const [allmovie, setAllmovie] = useState([])
    const [loading, setLoading] = useState(true);
-   const [id, setId] = useState(`${item.id}`)
-   const [name, setName] = useState(CryptoJS.AES.encrypt(`${item.title}`, 'password').toString())
-   const [overview, setOverview] = useState(CryptoJS.AES.encrypt(`${item.overview}`, 'password').toString())
-   const [image, setImage] = useState(CryptoJS.AES.encrypt(`https://image.tmdb.org/t/p/w500/${item?.backdrop_path}`, 'password').toString())
-   const [price, setPrice] = useState(1000000000000000000000000)
 
-  //  const clikedMovie ={
-  //   id : item.id,
-  //   name : CryptoJS.AES.encrypt(`${item.title}`, 'password').toString(),
-  //   overview : CryptoJS.AES.encrypt(`${item.overview}`, 'password').toString(),
-  //   image: CryptoJS.AES.encrypt(`https://image.tmdb.org/t/p/w500/${item?.backdrop_path}`, 'password').toString(),
-  //   price: 1000000000000000000000000,
-  //  }
-  //  console.log(clikedMovie)
-  const movies = {id,name,overview,image,price}
 
-  useEffect(() => {
-   getMovies();
+   // all the work as regard the adding to database and buying is supposed to be done here
+
+   //I moved the this function from marketplace.js to check if the error was due to local state
+  // here am trying to add the current state of values in the popUp to the contract
+  function setMovie() {
+    const account = window.walletConnection.account();
+    
+    const movie ={
+      id : `${item.id}`,
+      name : CryptoJS.AES.encrypt(`${item.title}`, 'password').toString(),
+      overview : CryptoJS.AES.encrypt(`${item.overview}`, 'password').toString(),
+      image: CryptoJS.AES.encrypt(`https://image.tmdb.org/t/p/w500/${item?.backdrop_path}`, 'password').toString(),
+      price: 1000000000000000000000000,
+     }
    
-  }, []);
+     // this is the contract call function
+    //these are the arguments
+    return window.contract.setMovie({ movie }, GAS); 
+  }
 
-  async function addMovie() {
-    console.log(name, image);
-    try {
-        await setMovie({id, name, overview, image, price});
-        const Allmovies = getMovies();
-        console.log(Allmovies)
-        console.log('added sucessfully')
-    } catch (error) {
-        console.log(error);
-    }
-}
+// ignore this
+// const handlebuy = async (id, price) => {
 
-  //  const addMovie = async (data) => {
-  //   console.log(id,name,overview,image,price)
-  //   try {
-  //     setLoading(true);
-  //     setMovie(data).then((resp) => {
-  //       getProducts();
-  //     });
-  //     console.log ("Product added successfully.");
-  //   } catch (error) {
-  //     console.log({ error });
-  //     console.log("Failed to create a product.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
+//   setMovie();
+//   try {
+//     await buyMovie({
+//     id,
+//     price
+//     })
+//     console.log('Movie bought sucessfully')
+//   } catch (error) {
+//     console.log(error);
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+ 
+// here im tryin to see if I can add the movie to the contract without  buying it
    const handlebuy = async (id, price) => {
 
-    try{
-    addMovie()
-    console.log('ran added function')
-
-    } catch (error){
-     console.log('failed to add')
-    };
     try {
-      await buyProduct({
-      id,
-      price
-      })
-      console.log('Movie bought sucessfully')
+      await setMovie();
+      console.log('Movie added sucessfully')
     } catch (error) {
-      console.log("Failed to purchase product.");
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -114,6 +100,11 @@ function PopUp({ item, props, title,close,  release_date }) {
       </>
     )
   }
+
+  useEffect(() => {
+    getMovies();
+    
+   }, []);
 
   
 

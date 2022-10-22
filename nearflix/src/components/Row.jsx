@@ -26,7 +26,7 @@ const Row = ({ title, fetchURL, rowId, item}) => {
       setMovies(res.data.results)
     })
   }, [fetchURL])
-  console.log(movies)
+ // console.log(movies)
 
   const slideLeft = () => {
     var slider = document.getElementById('slider' + rowId);
